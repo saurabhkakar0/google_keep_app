@@ -39,8 +39,7 @@ public class NotesDao implements INotesDao {
 
     String sql = "UPDATE articles SET title=?, category=? WHERE articleId=?";
 
-    private static final String UPDATE_NODE_SQL = "UPDATE NODE SET" +
-
+    private static final String UPDATE_NODE_SQL = "UPDATE NODE SET " +
             "node_type = ?," +
             "title = ?," +
             "text = ?," +
@@ -49,7 +48,7 @@ public class NotesDao implements INotesDao {
             "isArchived = ?," +
             "baseVersion = ?," +
             "created_date = ?," +
-            "updated_date = ?) " +
+            "updated_date = ? " +
             "WHERE node_id = ?";
 
     private static final Logger logger = LoggerFactory.getLogger(NotesService.class);
@@ -73,11 +72,18 @@ public class NotesDao implements INotesDao {
         logger.debug("NotesDao::insertOrUpdate : requestId is {}, nodes in this request are {}",nodesChangeRequest.getRequestId(),nodesChangeRequest.getNodeList().size());
         for(BaseNode node:nodesChangeRequest.getNodeList()){
             if(nodeExists(node.getNodeId())){
+                if(node.isDeleted()){
+                    deleteNode();
+                }
                 updateNode(node);
             }else{
                 insertNode(node);
             }
         }
+    }
+
+    private void deleteNode() {
+
     }
 
     private void insertNode(BaseNode node) {
@@ -90,9 +96,9 @@ public class NotesDao implements INotesDao {
                     node.getNodeType().getValue(),
                     node.getTitle(),
                     node.getText(),
-                    node.isChecked(),
-                    node.isPinned(),
-                    node.isArchived(),
+                    DBUtill.getString(node.isChecked()),
+                    DBUtill.getString(node.isPinned()),
+                    DBUtill.getString(node.isArchived()),
                     node.getBaseVersion(),
                     DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getCreated()),
                     DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getUpdated()));
@@ -106,18 +112,17 @@ public class NotesDao implements INotesDao {
 
     private void updateNode(BaseNode node) {
 
-        final int update = jdbcTemplate.update(INSERT_NODE_SQL,
-                node.getNodeId(),
-                node.getParentId(),
+        final int update = jdbcTemplate.update(UPDATE_NODE_SQL,
                 node.getNodeType().getValue(),
                 node.getTitle(),
                 node.getText(),
-                node.isChecked(),
-                node.isPinned(),
-                node.isArchived(),
+                DBUtill.getString(node.isChecked()),
+                DBUtill.getString(node.isPinned()),
+                DBUtill.getString(node.isArchived()),
                 node.getBaseVersion(),
                 DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getCreated()),
-                DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getUpdated()));
+                DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getUpdated()),
+                node.getNodeId());
         logger.debug("NotesDao::insertNode : update is {}",update);
 
     }

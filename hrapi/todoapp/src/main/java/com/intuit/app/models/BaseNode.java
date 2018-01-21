@@ -68,7 +68,7 @@ public class BaseNode {
     private String title;
 
     private List<Attachment> attachmentList;
-    private boolean isPinned;
+    private boolean pinned;
     private boolean isArchived;
     private List<User> collaborators;
     private List<Long> labelIds;
@@ -165,11 +165,11 @@ public class BaseNode {
     }
 
     public boolean isPinned() {
-        return isPinned;
+        return pinned;
     }
 
     public void setPinned(boolean pinned) {
-        isPinned = pinned;
+        this.pinned = pinned;
     }
 
     public boolean isArchived() {

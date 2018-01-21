@@ -8,4 +8,11 @@ public class DBUtill {
         java.sql.Timestamp _timeStamp = new java.sql.Timestamp(dateTime.getMillis());
         return _timeStamp;
     }
+
+    public static String getString(boolean booleanValue) {
+        if(booleanValue)
+            return "Y";
+        else
+            return "N";
+    }
 }

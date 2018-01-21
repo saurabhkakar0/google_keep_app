@@ -11,10 +11,10 @@ package com.intuit.app.models;
  */
 public enum NodeType {
 
-    NOTE("N"),
-    LIST("L"),
-    LIST_ITEM("LI"),
-    BLOB("B");
+    NOTE("NOTE"),
+    LIST("LIST"),
+    LIST_ITEM("LIST_ITEM"),
+    BLOB("BLOB");
     public String getValue() {
         return value;
     }
