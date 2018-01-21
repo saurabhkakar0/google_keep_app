@@ -1,0 +1,53 @@
+CREATE DATABASE intuit_app;
+
+USE intuit_app;
+
+
+CREATE TABLE NODE
+	( node_id 			   VARCHAR(64) NOT NULL,                 # This is the unique id of the node
+	  node_type            VARCHAR(150) NOT NULL,                # Type of Node, Note or List
+      title                VARCHAR(150) ,                        # Title of the Node
+      isPinned             CHAR (1) DEFAULT 'N',
+      isArchived           CHAR (1) DEFAULT 'N',
+      isList   		       CHAR (1) DEFAULT 'N',
+      isTrashed			   CHAR (1) DEFAULT 'N',
+      baseVersion          INT  NOT NULL,
+	  created_date         TIMESTAMP NULL,                        # Date of creation of node
+      updated_date         TIMESTAMP NULL,                        # Date of updation of node
+      deleted_date         TIMESTAMP NULL ,                        # Date of deletion of node
+      trashed_date         TIMESTAMP NULL ,                        # Date of trash of node
+      PRIMARY KEY     (node_id)   								 # Make nodeId id the primary key
+	);
+
+
+
+CREATE TABLE LIST_ITEM
+	( node_id 			   VARCHAR(64) NOT NULL,                 # This is the unique id of the node
+      parent_node_id		   VARCHAR(50) NOT NULL,
+	  node_type            VARCHAR(150) NOT NULL,                # Type of Node, Note or List
+      text                 VARCHAR(1000) NOT NULL,                # Title of the Node
+      isChecked            CHAR (1) DEFAULT 'N',
+      isArchived           CHAR (1) DEFAULT 'N',
+      baseVersion          INT  NOT NULL,
+	  created_date         TIMESTAMP  NULL,                        # Date of creation of node
+      updated_date         TIMESTAMP  NULL,                        # Date of updation of node
+      deleted_date         TIMESTAMP  NULL,                        # Date of deletion of node
+      trashed_date         TIMESTAMP  NULL,                        # Date of trash of node
+      PRIMARY KEY    (node_id),   								 # Make the nodeId the primary key
+      FOREIGN KEY (parent_node_id) REFERENCES NODE(node_id) ON DELETE CASCADE
+	);
+
+
+
+CREATE TABLE ATTACHMENT
+	( node_id 			   VARCHAR(64) NOT NULL,                 # This is the unique id of the node
+	  image				   blob,
+      parent_node_id	   VARCHAR(50) NOT NULL,
+      text                 VARCHAR(1000) NOT NULL,                # Title of the Node
+      created_date         TIMESTAMP  NULL,                        # Date of creation of node
+      updated_date         TIMESTAMP  NULL,                        # Date of updation of node
+      deleted_date         TIMESTAMP  NULL,                        # Date of deletion of node
+      trashed_date         TIMESTAMP  NULL,                        # Date of trash of node
+      PRIMARY KEY    (node_id),   								 # Make the nodeId the primary key
+      FOREIGN KEY (parent_node_id) REFERENCES NODE(node_id) ON DELETE CASCADE
+	);
