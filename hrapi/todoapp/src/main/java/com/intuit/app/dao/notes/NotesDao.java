@@ -37,6 +37,21 @@ public class NotesDao implements INotesDao {
             "updated_date) " +
             "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
+    String sql = "UPDATE articles SET title=?, category=? WHERE articleId=?";
+
+    private static final String UPDATE_NODE_SQL = "UPDATE NODE SET" +
+
+            "node_type = ?," +
+            "title = ?," +
+            "text = ?," +
+            "isChecked = ?," +
+            "isPinned = ?," +
+            "isArchived = ?," +
+            "baseVersion = ?," +
+            "created_date = ?," +
+            "updated_date = ?) " +
+            "WHERE node_id = ?";
+
     private static final Logger logger = LoggerFactory.getLogger(NotesService.class);
 
     @Autowired
@@ -56,8 +71,6 @@ public class NotesDao implements INotesDao {
     @Transactional
     public void insertOrUpdate(NodesChangeRequest nodesChangeRequest) {
         logger.debug("NotesDao::insertOrUpdate : requestId is {}, nodes in this request are {}",nodesChangeRequest.getRequestId(),nodesChangeRequest.getNodeList().size());
-
-        getNotes();
         for(BaseNode node:nodesChangeRequest.getNodeList()){
             if(nodeExists(node.getNodeId())){
                 updateNode(node);
@@ -92,6 +105,21 @@ public class NotesDao implements INotesDao {
     }
 
     private void updateNode(BaseNode node) {
+
+        final int update = jdbcTemplate.update(INSERT_NODE_SQL,
+                node.getNodeId(),
+                node.getParentId(),
+                node.getNodeType().getValue(),
+                node.getTitle(),
+                node.getText(),
+                node.isChecked(),
+                node.isPinned(),
+                node.isArchived(),
+                node.getBaseVersion(),
+                DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getCreated()),
+                DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getUpdated()));
+        logger.debug("NotesDao::insertNode : update is {}",update);
+
     }
 
     private boolean nodeExists(String id) {

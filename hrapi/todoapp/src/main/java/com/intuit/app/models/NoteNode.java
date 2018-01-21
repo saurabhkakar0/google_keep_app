@@ -10,7 +10,7 @@ public class NoteNode extends BaseNode{
     private boolean isPinned;
     private boolean isArchived;
     private List<User> collaborators;
-    private List<Label> labelIds;
+    private List<Long> labelIds;
 
 
 
@@ -55,11 +55,11 @@ public class NoteNode extends BaseNode{
         isArchived = archived;
     }
 
-    public List<Label> getLabelIds() {
+    public List<Long> getLabelIds() {
         return labelIds;
     }
 
-    public void setLabelIds(List<Label> labelIds) {
+    public void setLabelIds(List<Long> labelIds) {
         this.labelIds = labelIds;
     }
 
