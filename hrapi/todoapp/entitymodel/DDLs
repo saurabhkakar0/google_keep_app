@@ -8,7 +8,7 @@ CREATE TABLE NODE
       parent_node_id	   VARCHAR(64) NULL,
 	  node_type            VARCHAR(150) NOT NULL,                # Type of Node, Note or List
       title                VARCHAR(150) ,                        # Title of the Node
-      text                 VARCHAR(1000) ,                # Text of the Node
+      text                 VARCHAR(1000) ,                       # Text of the Node
       isChecked            CHAR (1) DEFAULT 'N',
       isPinned             CHAR (1) DEFAULT 'N',
       isArchived           CHAR (1) DEFAULT 'N',
@@ -27,11 +27,22 @@ CREATE TABLE ATTACHMENT
 	( node_id 			   VARCHAR(64) NOT NULL,                 # This is the unique id of the node
 	  image				   blob,
       parent_node_id	   VARCHAR(50) NOT NULL,
-      text                 VARCHAR(1000) NOT NULL,                # Title of the Node
+      text                 VARCHAR(1000) NOT NULL,                # Text of the Node
       created_date         TIMESTAMP  NULL,                        # Date of creation of node
       updated_date         TIMESTAMP  NULL,                        # Date of updation of node
       deleted_date         TIMESTAMP  NULL,                        # Date of deletion of node
       trashed_date         TIMESTAMP  NULL,                        # Date of trash of node
       PRIMARY KEY    (node_id),   								 # Make the nodeId the primary key
       FOREIGN KEY (parent_node_id) REFERENCES NODE(node_id) ON DELETE CASCADE
+	);
+
+CREATE TABLE USER
+	( user_id 			   INT NOT NULL AUTO_INCREMENT,
+	  user_name            VARCHAR(255) NOT NULL,
+      user_email		   VARCHAR(255) NOT NULL,
+      first_name           VARCHAR(50)  NOT NULL,
+      last_name           VARCHAR(50)  NOT NULL,
+      created_date         TIMESTAMP  NULL,
+      updated_date         TIMESTAMP  NULL,
+      PRIMARY KEY    (user_id)
 	);

@@ -40,8 +40,6 @@ public class NodeController {
     public ResponseEntity<BaseAPIResponse> updateOrInserNote(@RequestBody NodesChangeRequest nodesChangeRequest, HttpServletRequest request) throws Exception{
 
         logger.debug("NodeController::updateOrInserNote : requestId is {}",nodesChangeRequest.getRequestId());
-
-
         notesService.updateNodes(nodesChangeRequest);
         NodesChangeResponse response = new NodesChangeResponse();
         response.setStatusCode(HttpStatus.OK.value()); //Adding Status in the Response Body too.
@@ -56,7 +54,7 @@ public class NodeController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<BaseAPIResponse> getNotes(){
 
-        logger.debug("In getNotes method");
+        logger.debug("NodeController::getNotes : requestId is {}\",nodesChangeRequest.getRequestId()");
         NodeResponse response = new NodeResponse();
         response.setStatusCode(HttpStatus.OK.value()); //Adding Status in the Response Body too.
         response.setStatusMessage("SUCCESS");
