@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 @EnableAutoConfiguration
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-@ComponentScan(basePackages = { "com.stashinvest.controller"})
+@ComponentScan(basePackages = { "com.intuit.app.controller"})
 @EnableWebMvc
 public class Config extends WebMvcConfigurerAdapter {
 
