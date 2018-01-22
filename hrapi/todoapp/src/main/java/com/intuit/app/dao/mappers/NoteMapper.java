@@ -11,7 +11,7 @@ public class NoteMapper implements RowMapper<BaseNode>{
 
         @Override
         public BaseNode mapRow(ResultSet row, int rowNum) throws SQLException {
-            NoteNode node = new NoteNode();
+            BaseNode node = new BaseNode();
             node.setNodeId(row.getString("node_id"));
             node.setPinned(row.getString("isPinned")=="Y"?true:false);
             node.setArchived(row.getString("isArchived")=="Y"?true:false);

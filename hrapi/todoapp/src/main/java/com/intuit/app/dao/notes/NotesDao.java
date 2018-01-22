@@ -150,22 +150,25 @@ public class NotesDao implements INotesDao {
     }
 
     private void updateNode(BaseNode node) {
-
-        if(node.isTrashed()){
-            updateNodeAndChildren(node);
-        }else {
-            final int update = jdbcTemplate.update(UPDATE_NODE_SQL,
-                    node.getNodeType().getValue(),
-                    node.getTitle(),
-                    node.getText(),
-                    DBUtill.getString(node.isChecked()),
-                    DBUtill.getString(node.isPinned()),
-                    DBUtill.getString(node.isArchived()),
-                    node.getBaseVersion(),
-                    DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getCreated()),
-                    DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getUpdated()),
-                    node.getNodeId());
-            logger.debug("NotesDao::insertNode : update is {}",update);
+        try {
+            if (node.isTrashed()) {
+                updateNodeAndChildren(node);
+            } else {
+                final int update = jdbcTemplate.update(UPDATE_NODE_SQL,
+                        node.getNodeType().getValue(),
+                        node.getTitle(),
+                        node.getText(),
+                        DBUtill.getString(node.isChecked()),
+                        DBUtill.getString(node.isPinned()),
+                        DBUtill.getString(node.isArchived()),
+                        node.getBaseVersion(),
+                        DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getCreated()),
+                        DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getUpdated()),
+                        node.getNodeId());
+                logger.debug("NotesDao::insertNode : update is {}", update);
+            }
+        }catch(Throwable t){
+            logger.error("NotesDao::updateNode : Error updating the node with node id {}",node.getNodeId());
         }
         
 

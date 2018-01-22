@@ -3,19 +3,12 @@ package com.intuit.app.models;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
  * This is the base class of all the Nodes.
  */
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "nodeType")
-@JsonSubTypes({@JsonSubTypes.Type(value = BaseNode.class, name = "NOTE"),
-        @JsonSubTypes.Type(value = BaseNode.class, name = "LIST"),
-        @JsonSubTypes.Type(value = BaseNode.class, name = "LIST_ITEM"),
-        @JsonSubTypes.Type(value = Attachment.class, name = "BLOB")
-})
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BaseNode {
 
@@ -35,11 +28,10 @@ public class BaseNode {
     private boolean trashed;
 
     /**
-     * This will store the type of NoteNode
+     * This will store the type of Node.
      * @see NodeType
-     * It is default to @<code>{@link NoteNode}</code>
      */
-    private NodeType nodeType = NodeType.NOTE;
+    private NodeType nodeType ;
 
     /**
      * This stores the User who created this node.

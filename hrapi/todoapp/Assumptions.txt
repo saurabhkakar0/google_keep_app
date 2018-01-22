@@ -26,6 +26,7 @@
        table.
 
     8. If parent nodeId is set to isTrashed true, then all the child nodeIds (LIST_ITEM and BLOB) will also be set as isTrashed true.
+    9. If parent nodeId is set to deleted true, then all the child nodeIds (LIST_ITEM and BLOB) will also be deleted too.
 
 
 

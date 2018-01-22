@@ -47,6 +47,7 @@ public class NodeController {
         response.setStatusCode(HttpStatus.OK.value()); //Adding Status in the Response Body too.
         response.setStatusMessage("SUCCESS");
         response.setNodes(nodesChangeRequest.getNodeList());
+        response.setRequestId(nodesChangeRequest.getRequestId());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
     }
