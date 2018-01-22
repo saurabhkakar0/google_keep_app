@@ -67,7 +67,7 @@ public class BaseNode {
 
     private String title;
 
-    private List<Attachment> attachmentList;
+    private List<Long> attachmentList;
     private boolean pinned;
     private boolean isArchived;
     private List<User> collaborators;
@@ -156,11 +156,11 @@ public class BaseNode {
         this.title = title;
     }
 
-    public List<Attachment> getAttachmentList() {
+    public List<Long> getAttachmentList() {
         return attachmentList;
     }
 
-    public void setAttachmentList(List<Attachment> attachmentList) {
+    public void setAttachmentList(List<Long> attachmentList) {
         this.attachmentList = attachmentList;
     }
 
