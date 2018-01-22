@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.intuit.app.models.BaseNode;
-import com.intuit.app.models.NoteNode;
 
 public class NoteMapper implements RowMapper<BaseNode>{
 

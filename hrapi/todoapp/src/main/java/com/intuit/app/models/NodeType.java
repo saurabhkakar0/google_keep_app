@@ -4,10 +4,10 @@ package com.intuit.app.models;
  * NodeType can be of following types:
  *
  *
- *    @see NoteNode Basic Note with no checked or line items
- *    @see ListNode ListNode is like Note but may have Line Items. Line Items are associated with the Status.
- *    @see ListItem Item
- *    @see Attachment This can be image of format jpeg and png.
+ *    1. Basic Note Node. This will not have any checked or line items
+ *    2. ListNote Node is like Basic Note but may have Line Items. Line Items are associated with the completed or inCompleted status.
+ *    3. ListItem Node. This node is associated with ListNode or Basic Note as its child.
+ *    4. Attachment Node This can be image of format jpeg and png.
  */
 public enum NodeType {
 
