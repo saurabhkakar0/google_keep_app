@@ -17,7 +17,13 @@ public class Label {
     private Long labelId;
     private String labelName;
     private Timestamps timestamps;
+    /**
+     * If deleted is true, then this label will be removed from the node
+     */
     private boolean deleted;
+    /**
+     * If selected is true, then this label will be assigned to the node
+     */
     private boolean selected;
     private java.util.List attachedNotes;
 
