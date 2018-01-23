@@ -1,5 +1,6 @@
 com.intuit.app
 com.intuit.app.cache
+com.intuit.app.client
 com.intuit.app.config
 com.intuit.app.controller
 com.intuit.app.controller.advice
