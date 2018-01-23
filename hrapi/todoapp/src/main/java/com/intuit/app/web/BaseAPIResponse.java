@@ -39,4 +39,12 @@ public class BaseAPIResponse {
         this.requestId = requestId;
     }
 
+    @Override
+    public String toString() {
+        return "{statusCode :" +statusCode +
+                ", statusMessage :" +statusMessage +
+                ", version :" +version +
+                ", requestId :" +requestId +
+                "}";
+    }
 }

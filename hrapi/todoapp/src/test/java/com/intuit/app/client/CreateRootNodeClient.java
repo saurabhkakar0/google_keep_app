@@ -21,12 +21,12 @@ import com.intuit.app.web.change.NodesChangeRequest;
 import com.intuit.app.web.change.NodesChangeResponse;
 
 
-public class CreateRootNode {
+public class CreateRootNodeClient {
 
     private static final Logger log = LoggerFactory.getLogger(CreateNoteClient.class);
 
     public static void main(String args[]) {
-        new CreateRootNode().addNewNote();
+        new CreateRootNodeClient().addNewNote();
     }
 
 
@@ -42,7 +42,7 @@ public class CreateRootNode {
 
         HttpEntity<NodesChangeRequest> request = new HttpEntity<NodesChangeRequest>(nodesChangeRequest, headers);
         NodesChangeResponse response = restTemplate.postForObject("http://localhost:8080/intuit/v1/notes/change/", request, NodesChangeResponse.class);
-        log.info(response.getRequestId());
+        log.info(response.toString());
 
     }
 
@@ -61,7 +61,6 @@ public class CreateRootNode {
                 .setArchived(false)
                 .setBaseVersion(1)
                 .setChecked(false)
-                //.setLabels(labels)
                 .setNodeType(NodeType.LIST)
                 .setPinned(true)
                 .setTrashed(false)

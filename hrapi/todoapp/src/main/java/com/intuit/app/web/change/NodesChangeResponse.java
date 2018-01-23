@@ -16,4 +16,9 @@ public class NodesChangeResponse extends BaseAPIResponse{
     public void setNodes(List<BaseNode> nodes) {
         this.nodes = nodes;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
