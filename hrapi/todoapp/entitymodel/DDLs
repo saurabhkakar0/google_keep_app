@@ -57,3 +57,15 @@ CREATE TABLE LABEL
       trashed_date         TIMESTAMP  NULL,                        # Date of trash of label
       PRIMARY KEY    (label_id)   								 # Make the label_id the primary key
 	);
+
+
+CREATE TABLE NODE_LABEL
+	(
+      node_id 			   VARCHAR(64) NOT NULL,
+      label_id 			   INT NOT NULL ,                 # This is the unique id of the labe;
+      created_date         TIMESTAMP  NULL,                        # Date of creation of label
+      updated_date         TIMESTAMP  NULL,                        # Date of updation of label
+      deleted_date         TIMESTAMP  NULL,                        # Date of deletion of label
+      trashed_date         TIMESTAMP  NULL,                        # Date of trash of label
+      PRIMARY KEY    (node_id,label_id)   								 # Make the label_id the primary key
+	);

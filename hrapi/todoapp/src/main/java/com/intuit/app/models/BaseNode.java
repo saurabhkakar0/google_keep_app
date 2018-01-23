@@ -63,7 +63,7 @@ public class BaseNode {
     private boolean pinned;
     private boolean isArchived;
     private List<User> collaborators;
-    private List<Long> labelIds;
+    private List<Label> labels;
 
     private String text;
     private boolean isChecked;
@@ -180,12 +180,12 @@ public class BaseNode {
         this.collaborators = collaborators;
     }
 
-    public List<Long> getLabelIds() {
-        return labelIds;
+    public List<Label> getLabels() {
+        return labels;
     }
 
-    public void setLabelIds(List<Long> labelIds) {
-        this.labelIds = labelIds;
+    public void setLabels(List<Label> labels) {
+        this.labels = labels;
     }
 
     public String getText() {

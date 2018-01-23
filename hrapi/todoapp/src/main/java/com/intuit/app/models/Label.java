@@ -1,12 +1,14 @@
 package com.intuit.app.models;
 
-import org.joda.time.DateTime;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * the {@code Label} class represents the label if assigned to any NoteNode or ListNode.
- * @see NoteNode
- * @see ListNode
+ * the {@code Label} class represents the label if assigned to any Node.
+ * Label can not be associated with any Node of type LIST_ITEM
+ * @see BaseNode
+ * @see NodeType
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Label {
 
     /**
@@ -14,8 +16,9 @@ public class Label {
      */
     private Long labelId;
     private String labelName;
-    private DateTime ceratedDate;
-    private DateTime lastModifiedDate;
+    private Timestamps timestamps;
+    private boolean deleted;
+    private boolean selected;
     private java.util.List attachedNotes;
 
     public Long getLabelId() {
@@ -34,26 +37,34 @@ public class Label {
         this.labelName = labelName;
     }
 
-    public DateTime getCeratedDate() {
-        return ceratedDate;
+    public Timestamps getTimestamps() {
+        return timestamps;
     }
 
-    public void setCeratedDate(DateTime ceratedDate) {
-        this.ceratedDate = ceratedDate;
+    public void setTimestamps(Timestamps timestamps) {
+        this.timestamps = timestamps;
     }
 
-    public DateTime getLastModifiedDate() {
-        return lastModifiedDate;
+    public boolean isDeleted() {
+        return deleted;
     }
 
-    public void setLastModifiedDate(DateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     /**
      *
      * @return All NoteNode labelled with this label name;
-     * @see NoteNode
+     * @see BaseNode
      */
     public java.util.List getAttachedNotes() {
         return attachedNotes;

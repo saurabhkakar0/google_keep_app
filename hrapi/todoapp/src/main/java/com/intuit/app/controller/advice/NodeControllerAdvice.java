@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
 
+import com.intuit.app.controller.NodeController;
 import com.intuit.app.web.BaseAPIResponse;
 
 
-@ControllerAdvice
+@ControllerAdvice(basePackageClasses = {NodeController.class})
 public class NodeControllerAdvice extends AbstractMappingJacksonResponseBodyAdvice {
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -34,6 +35,7 @@ public class NodeControllerAdvice extends AbstractMappingJacksonResponseBodyAdvi
     protected ResponseEntity<BaseAPIResponse> handleException(Exception ex){
         BaseAPIResponse response = new BaseAPIResponse();
         response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        response.setStatusMessage(ex.getMessage());
         ex.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)

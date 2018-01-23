@@ -4,11 +4,13 @@ package com.intuit.app.models;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * This class contains all the timestamps related information.
  * All the timestamps are expected to be passed by front end.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Timestamps {
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd hh:mm:ss")

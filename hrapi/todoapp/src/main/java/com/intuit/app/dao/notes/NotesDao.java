@@ -8,11 +8,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.intuit.app.dao.label.ILabelDao;
 import com.intuit.app.dao.mappers.NoteMapper;
 import com.intuit.app.models.BaseNode;
+import com.intuit.app.models.Label;
 import com.intuit.app.models.NodeType;
 import com.intuit.app.service.notes.NotesService;
 import com.intuit.app.utils.DBUtill;
@@ -21,6 +25,9 @@ import com.intuit.app.web.change.NodesChangeRequest;
 @Transactional
 @Repository
 public class NotesDao implements INotesDao {
+
+    @Autowired
+    ILabelDao labelDao;
 
     private static final String ROOT = "root";
     private static final String EXISTS_SQL = "SELECT count(*) FROM NODE WHERE node_id = ?";
@@ -37,8 +44,6 @@ public class NotesDao implements INotesDao {
             "created_date," +
             "updated_date) " +
             "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-
-    String sql = "UPDATE articles SET title=?, category=? WHERE articleId=?";
 
     private static final String UPDATE_NODE_SQL = "UPDATE NODE SET " +
             "node_type = ?," +
@@ -66,10 +71,22 @@ public class NotesDao implements INotesDao {
             "   ) AS p " +
             " )";
 
+    private static final String DELETE_LABEL_SQL = "DELETE FROM NODE_LABEL WHERE node_id = :node_id and label_id in (:deletedLabels)";
+
+    private static final String INSERT_LABEL_SQL = "INSERT INTO NODE_LABEL (node_id, label_id) " +
+            "SELECT * FROM ( SELECT :node_id, :label_id ) As tmp " +
+            "WHERE NOT EXISTS ( " +
+            "SELECT node_id,label_id FROM NODE_LABEL WHERE node_id = :node_id and label_id = :label_id" +
+            ") LIMIT 1";
+
     private static final Logger logger = LoggerFactory.getLogger(NotesService.class);
+
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public List<List<BaseNode>> getNotes(){
         List<List<BaseNode>> result = new ArrayList<>();
@@ -150,10 +167,14 @@ public class NotesDao implements INotesDao {
     }
 
     private void updateNode(BaseNode node) {
-        try {
-            if (node.isTrashed()) {
-                updateNodeAndChildren(node);
-            } else {
+
+            if(node.getParentId().equals(ROOT)){
+                if (node.isTrashed()) {
+                    updateNodeAndChildren(node);
+                }
+                updateLabels(node);
+            }
+            else {
                 final int update = jdbcTemplate.update(UPDATE_NODE_SQL,
                         node.getNodeType().getValue(),
                         node.getTitle(),
@@ -165,13 +186,37 @@ public class NotesDao implements INotesDao {
                         DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getCreated()),
                         DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getUpdated()),
                         node.getNodeId());
-                logger.debug("NotesDao::insertNode : update is {}", update);
+                logger.debug("NotesDao::updateNode : update is {}", update);
             }
-        }catch(Throwable t){
-            logger.error("NotesDao::updateNode : Error updating the node with node id {}",node.getNodeId());
-        }
-        
 
+    }
+
+    private void updateLabels(BaseNode node) {
+        List<Long> selectedLabels = new ArrayList<>();
+        List<Long> deletedLabels = new ArrayList<>();
+        for(Label label:node.getLabels()){
+            if(label.isDeleted()){
+                deletedLabels.add(label.getLabelId());
+            }else if(label.isSelected()){
+                selectedLabels.add(label.getLabelId());
+            }
+        }
+        if(deletedLabels.size() > 0){
+            MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+            namedParameters.addValue("deletedLabels", deletedLabels);
+            namedParameters.addValue("node_id",node.getNodeId());
+            int delete = namedParameterJdbcTemplate.update(DELETE_LABEL_SQL, namedParameters);
+            logger.debug("NotesDao::updateLabels : delete is {}", delete);
+        }
+        if(selectedLabels.size() > 0){
+            for(Long labelId:selectedLabels) {
+                MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+                namedParameters.addValue("label_id", labelId);
+                namedParameters.addValue("node_id", node.getNodeId());
+                int insert = namedParameterJdbcTemplate.update(INSERT_LABEL_SQL, namedParameters);
+                logger.debug("NotesDao::updateLabels : insert is {}", insert);
+            }
+        }
     }
 
     private void updateNodeAndChildren(BaseNode node) {

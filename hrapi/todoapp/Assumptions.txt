@@ -1,7 +1,7 @@
 1 For each request sent by front end client to server, following assumptions are made
 
     1. For each node in nodes list, nodeId must be present.
-       nodeId will be UNIX based timestamp + uniqueId which needs to be send by front end client to the back end server.
+       nodeId will be UNIX based timestamp + userId which needs to be send by front end client to the back end server.
 
     2. Client of this backend service is responsible for maintaining the state of all the nodes. On any change in the node on the
        client side, back end service will be called with the changed nodes.
@@ -26,7 +26,17 @@
        table.
 
     8. If parent nodeId is set to isTrashed true, then all the child nodeIds (LIST_ITEM and BLOB) will also be set as isTrashed true.
+
     9. If parent nodeId is set to deleted true, then all the child nodeIds (LIST_ITEM and BLOB) will also be deleted too.
+
+    10. Client is responsible for sending the following information regarding attached Labels to the Nodes :
+        a. deleted - This will be set to true if the Label is removed by the user for the node it was assigned.
+        b. selected - This will be set to true if the Label is selected first time by the user for the node.
+        labelId must exist in the database for both the above operation.
+
+
+
+
 
 
 
