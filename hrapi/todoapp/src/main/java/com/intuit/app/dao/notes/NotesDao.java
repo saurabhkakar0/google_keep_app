@@ -17,7 +17,6 @@ import com.intuit.app.dao.label.ILabelDao;
 import com.intuit.app.dao.mappers.NoteMapper;
 import com.intuit.app.models.BaseNode;
 import com.intuit.app.models.Label;
-import com.intuit.app.models.NodeType;
 import com.intuit.app.service.notes.NotesService;
 import com.intuit.app.utils.DBUtill;
 import com.intuit.app.web.change.NodesChangeRequest;
@@ -30,8 +29,6 @@ public class NotesDao implements INotesDao {
     ILabelDao labelDao;
 
     private static final String ROOT = "root";
-    private static final String EXISTS_SQL = "SELECT count(*) FROM NODE WHERE node_id = ?";
-
 
     private static final String INSERT_UPDATE_NODE_SQL = "INSERT INTO NODE (   " +
             "   node_id,  " +
@@ -70,32 +67,6 @@ public class NotesDao implements INotesDao {
             "   created_date = VALUES(created_date),  " +
             "   updated_date = VALUES(updated_date);  ";
 
-    private static final String INSERT_NODE_SQL = "INSERT INTO NODE (" +
-            "   node_id," +
-            "   parent_node_id," +
-            "   node_type," +
-            "   title," +
-            "   text," +
-            "   isChecked," +
-            "   isPinned," +
-            "   isArchived," +
-            "   baseVersion," +
-            "   created_date," +
-            "   updated_date) " +
-            "   VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-
-    private static final String UPDATE_NODE_SQL = "UPDATE NODE SET " +
-            "   node_type = ?," +
-            "   title = ?," +
-            "   text = ?," +
-            "   isChecked = ?," +
-            "   isPinned = ?," +
-            "   isArchived = ?," +
-            "   baseVersion = ?," +
-            "   created_date = ?," +
-            "   updated_date = ? " +
-            "   WHERE node_id = ?";
-
     private static final String DELETE_NODE_SQL = "DELETE FROM NODE WHERE node_id = ?";
 
     private static final String DELETE_ROOT_NODE = "DELETE FROM NODE WHERE node_id IN ( " +
@@ -119,7 +90,6 @@ public class NotesDao implements INotesDao {
             "   ) LIMIT 1";
 
     private static final Logger logger = LoggerFactory.getLogger(NotesService.class);
-
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -156,9 +126,6 @@ public class NotesDao implements INotesDao {
                     return;
                 }else
                     updateNode(node);
-
-               // insertNode(node);
-
         }
     }
 
@@ -189,32 +156,35 @@ public class NotesDao implements INotesDao {
         logger.debug("NotesDao::deleteNodeAndAllChildNodes : delete is {}",delete);
     }
 
-    private void insertNode(BaseNode node) {
-        if(node.getNodeType().equals(NodeType.BLOB)){
-            insertAttachment();
-        }else{
-            insertUpdateNodeDetails(node);
-
-        }
-    }
-
-    private void insertAttachment() {
-    }
-
+    /**
+     *
+     * @param node
+     *        node to be updated or inserted
+     *
+     *        if node is ROOT node and it is marked as trashed, then all the associated child nodes (LIST_ITEM and BLOB) will
+     *        be trashed.
+     *        if node is ROOT node then all its label will either be inserted if this label is assigned very first time by the
+     *        user or it will be deleted if user has removed the label from the front end.
+     *        NOTE: Deletion of label just removed the mapping between the root node and this label.
+     *
+     */
     private void updateNode(BaseNode node) {
-
         if(node.getParentId().equals(ROOT)){
             if (node.isTrashed()) {
-                updateNodeAndChildren(node);
+                markNodeAsTrashed(node);
                 return;
             }
             updateLabels(node);
         }
         insertUpdateNodeDetails(node);
-
-
     }
 
+    /**
+     *
+     * @param node
+     *        This node will either get inserted or updated depending on the <code>node.getNodeId</code> presence
+     *        in the database.
+     */
     private void insertUpdateNodeDetails(BaseNode node) {
         final int update = jdbcTemplate.update(INSERT_UPDATE_NODE_SQL,
                 node.getNodeId(),
@@ -267,12 +237,13 @@ public class NotesDao implements INotesDao {
         logger.debug("NotesDao::updateLabels : delete is {}", delete);
     }
 
-    private void updateNodeAndChildren(BaseNode node) {
+    /**
+     *
+     * @param node
+     *        This will update the trash flags for the ROOT node and all its child nodes (LIST_ITEM and BLOBs)
+     */
+    private void markNodeAsTrashed(BaseNode node) {
     }
 
-    private boolean nodeExists(String id) {
-        String nodeId = jdbcTemplate.queryForObject(EXISTS_SQL,String.class,id);
-        return !nodeId.equals("0");
-    }
 
 }
