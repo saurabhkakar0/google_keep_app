@@ -53,8 +53,8 @@ public class CreateNoteClient {
         List<Label> labels = getLabels();
         Timestamps timestamps = getTimeStamps();
 
-        String parentId = "75915915241017734854416";
-        nodesBuilder.setNodeId("75915915241017734854416")
+        String parentId = "79336190381376734854416root";
+        nodesBuilder.setNodeId("79336190381376734854416root")
         .setParentId("root")
         .setDeleted(false)
         .setTitle("Intuit App Title 1")
@@ -86,7 +86,7 @@ public class CreateNoteClient {
 
         nodes.add(new BaseNode(nodesBuilder));
 
-        nodesBuilder.setNodeId(getDateTime()+"734854416")
+        nodesBuilder.setNodeId(getDateTime()+"734854417")
         .setParentId(parentId)
         .setDeleted(false)
         .setText("return items")
