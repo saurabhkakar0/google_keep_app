@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
 
 import com.intuit.app.controller.NodeController;
+import com.intuit.app.exception.LabelNotExistsException;
+import com.intuit.app.exception.NodeIdNotPresentException;
 import com.intuit.app.web.BaseAPIResponse;
 
 
@@ -35,6 +37,28 @@ public class NodeControllerAdvice extends AbstractMappingJacksonResponseBodyAdvi
     protected ResponseEntity<BaseAPIResponse> handleException(Exception ex){
         BaseAPIResponse response = new BaseAPIResponse();
         response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        response.setStatusMessage(ex.getMessage());
+        ex.printStackTrace();
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(response);
+    }
+
+    @ExceptionHandler(NodeIdNotPresentException.class)
+    protected ResponseEntity<BaseAPIResponse> handleMissingNodeIdException(NodeIdNotPresentException ex){
+        BaseAPIResponse response = new BaseAPIResponse();
+        response.setStatusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        response.setStatusMessage(ex.getMessage());
+        ex.printStackTrace();
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(response);
+    }
+
+    @ExceptionHandler(LabelNotExistsException.class)
+    protected ResponseEntity<BaseAPIResponse> handleLabelNotExistsException(LabelNotExistsException ex){
+        BaseAPIResponse response = new BaseAPIResponse();
+        response.setStatusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
         response.setStatusMessage(ex.getMessage());
         ex.printStackTrace();
         return ResponseEntity

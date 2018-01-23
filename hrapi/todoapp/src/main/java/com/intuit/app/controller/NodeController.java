@@ -38,7 +38,6 @@ public class NodeController {
      */
     @RequestMapping(value = "change/",method = RequestMethod.POST,consumes = "application/json",produces = "application/json")
     public ResponseEntity<BaseAPIResponse> updateOrInserNote(@RequestBody NodesChangeRequest nodesChangeRequest, HttpServletRequest request) throws Exception{
-
         logger.debug("NodeController::updateOrInserNote : requestId is {}",nodesChangeRequest.getRequestId());
         notesService.updateNodes(nodesChangeRequest);
         NodesChangeResponse response = new NodesChangeResponse();

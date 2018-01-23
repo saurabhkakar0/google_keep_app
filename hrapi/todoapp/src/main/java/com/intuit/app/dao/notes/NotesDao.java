@@ -11,22 +11,18 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.intuit.app.dao.label.ILabelDao;
 import com.intuit.app.dao.mappers.NoteMapper;
+import com.intuit.app.exception.ErrorCodes;
+import com.intuit.app.exception.NodeIdNotPresentException;
 import com.intuit.app.models.BaseNode;
 import com.intuit.app.models.Label;
 import com.intuit.app.service.notes.NotesService;
 import com.intuit.app.utils.DBUtill;
 import com.intuit.app.web.change.NodesChangeRequest;
 
-@Transactional
 @Repository
 public class NotesDao implements INotesDao {
-
-    @Autowired
-    ILabelDao labelDao;
 
     private static final String ROOT = "root";
 
@@ -115,17 +111,16 @@ public class NotesDao implements INotesDao {
      *
      */
     @Override
-    @Transactional
     public void insertOrUpdate(NodesChangeRequest nodesChangeRequest) {
         logger.debug("NotesDao::insertOrUpdate : requestId is {}, nodes in this request are {}",nodesChangeRequest.getRequestId(),nodesChangeRequest.getNodeList().size());
         for(BaseNode node:nodesChangeRequest.getNodeList()){
-            final String nodeId = node.getNodeId();
-
-                if(node.isDeleted()){
-                    deleteNode(node);
-                    return;
-                }else
-                    updateNode(node);
+            if(node.getNodeId()==null || node.getNodeId().trim().isEmpty())
+                throw new NodeIdNotPresentException(ErrorCodes.NODE_ID_MISSING,"Node Id is missing");
+            if(node.isDeleted()){
+                deleteNode(node);
+                return;
+            }else
+                updateNode(node);
         }
     }
 
@@ -136,7 +131,7 @@ public class NotesDao implements INotesDao {
      * @param node
      *        This is either the LIST_ITEM node or the ROOT node. If this is ROOT node, then all its children will be deleted.
      */
-    private void deleteNode(final BaseNode node) {
+    private void deleteNode(BaseNode node) {
         logger.debug("NotesDao::deleteNode Deleting Node with id {}",node.getNodeId());
         if(node.getParentId().equals(ROOT)){
             deleteNodeAndAllChildNodes(node);

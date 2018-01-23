@@ -1,13 +1,14 @@
 1 For each request sent by front end client to server, following assumptions are made
 
     1. For each node in nodes list, nodeId must be present.
-       nodeId will be UNIX based timestamp + userId which needs to be send by front end client to the back end server.
+       nodeId will be UNIX based timestamp + uniqueId which needs to be send by front end client to the back end server.
+       If nodeId is not present, then NodeIdNotPresentException will be thrown and Transaction will be rolled back.
 
     2. Client of this backend service is responsible for maintaining the state of all the nodes. On any change in the node on the
        client side, back end service will be called with the changed nodes.
 
     3. If node is root, then its parentId will be string "root". Else parentId will be the nodeId of the parent.
-       For example If node y is of type LIST_ITEM or BLOB, then they must have parentId present in the request.
+       For example If node "y" is of type LIST_ITEM or BLOB, then this node "y" must has parentId present in the request.
        Also parentId must be valid nodeId of node entity.
 
     4. All the timestamps related to the node will be send by front end. Following time stamps are required:
@@ -36,8 +37,16 @@
 
 
 
-
-
-
-
 2. For DDL scripts, Please refer to DDLs.txt in entitymodel folder.
+
+3. Technologies Used:
+
+     Maven
+     Spring Boot
+     Spring JDBC
+     REST based microservice
+     MySql Database
+     SQL
+     PostMan for testing
+     JSON as media transfer
+     Tomcat 8 Server
