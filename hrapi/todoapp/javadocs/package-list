@@ -1,12 +1,14 @@
 com.intuit.app
+com.intuit.app.cache
 com.intuit.app.config
 com.intuit.app.controller
 com.intuit.app.controller.advice
-com.intuit.app.controller.utils
+com.intuit.app.dao.label
 com.intuit.app.dao.mappers
 com.intuit.app.dao.notes
+com.intuit.app.dto
+com.intuit.app.exception
 com.intuit.app.models
-com.intuit.app.resolvers
 com.intuit.app.service.notes
 com.intuit.app.utils
 com.intuit.app.web

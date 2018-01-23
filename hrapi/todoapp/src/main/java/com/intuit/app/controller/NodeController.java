@@ -33,8 +33,11 @@ public class NodeController {
      *
      * @param nodesChangeRequest
      * @param request
-     * @return
+     * @return NodesChangeResponse
+     * @see NodesChangeResponse
      * @throws Exception
+     * @exception com.intuit.app.exception.NodeIdNotPresentException If nodeId is missing
+     * @exception com.intuit.app.exception.LabelNotExistsException If label does not exists in the database
      */
     @RequestMapping(value = "change/",method = RequestMethod.POST,consumes = "application/json",produces = "application/json")
     public ResponseEntity<BaseAPIResponse> updateOrInserNote(@RequestBody NodesChangeRequest nodesChangeRequest, HttpServletRequest request) throws Exception{
