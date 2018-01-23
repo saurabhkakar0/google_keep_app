@@ -36,17 +36,6 @@ CREATE TABLE ATTACHMENT
       FOREIGN KEY (parent_node_id) REFERENCES NODE(node_id) ON DELETE CASCADE
 	);
 
-CREATE TABLE USER
-	( user_id 			   INT NOT NULL AUTO_INCREMENT,
-	  user_name            VARCHAR(255) NOT NULL,
-      user_email		   VARCHAR(255) NOT NULL,
-      first_name           VARCHAR(50)  NOT NULL,
-      last_name           VARCHAR(50)  NOT NULL,
-      created_date         TIMESTAMP  NULL,
-      updated_date         TIMESTAMP  NULL,
-      PRIMARY KEY    (user_id)
-	);
-
 CREATE TABLE LABEL
 	( label_id 			   INT NOT NULL AUTO_INCREMENT,                 # This is the unique id of the labe;
 	  name				   VARCHAR(50) NOT NULL,
@@ -68,4 +57,17 @@ CREATE TABLE NODE_LABEL
       deleted_date         TIMESTAMP  NULL,                        # Date of deletion of label
       trashed_date         TIMESTAMP  NULL,                        # Date of trash of label
       PRIMARY KEY    (node_id,label_id)   								 # Make the label_id the primary key
+      FOREIGN KEY (node_id) REFERENCES NODE(node_id) ON DELETE CASCADE,
+      FOREIGN KEY (label_id) REFERENCES LABEL(label_id) ON DELETE CASCADE
+	);
+
+CREATE TABLE USER
+	( user_id 			   INT NOT NULL AUTO_INCREMENT,
+	  user_name            VARCHAR(255) NOT NULL,
+      user_email		   VARCHAR(255) NOT NULL,
+      first_name           VARCHAR(50)  NOT NULL,
+      last_name           VARCHAR(50)  NOT NULL,
+      created_date         TIMESTAMP  NULL,
+      updated_date         TIMESTAMP  NULL,
+      PRIMARY KEY    (user_id)
 	);
