@@ -68,6 +68,31 @@ public class BaseNode {
     private String text;
     private boolean isChecked;
 
+    public BaseNode() {
+    }
+
+    public BaseNode(NodesBuilder nodesBuilder) {
+        this.setArchived(nodesBuilder.isArchived);
+        this.setNodeId(nodesBuilder.nodeId);
+        this.setDeleted(nodesBuilder.deleted);
+        this.setTrashed(nodesBuilder.trashed);
+        this.setNodeType(nodesBuilder.nodeType);
+        this.setTimestamps(nodesBuilder.timestamps);
+        this.setCreatedBy(nodesBuilder.createdBy);
+        this.setLastModifiedBy(nodesBuilder.lastModifiedBy);
+        this.setParentId(nodesBuilder.parentId);
+        this.setBaseVersion(nodesBuilder.baseVersion);
+        this.setTitle(nodesBuilder.title);
+        this.setAttachmentList(nodesBuilder.attachmentList);
+        this.setPinned(nodesBuilder.pinned);
+        this.setArchived(nodesBuilder.isArchived);
+        this.setCollaborators(nodesBuilder.collaborators);
+        this.setLabels(nodesBuilder.labels);
+        this.setText(nodesBuilder.text);
+        this.setChecked(nodesBuilder.isChecked);
+
+    }
+
     public String getNodeId() {
         return nodeId;
     }
@@ -202,5 +227,115 @@ public class BaseNode {
 
     public void setChecked(boolean checked) {
         isChecked = checked;
+    }
+
+    public static class NodesBuilder {
+
+        private String nodeId;
+        private boolean deleted;
+        private boolean trashed;
+        private NodeType nodeType ;
+        private User createdBy;
+        private User lastModifiedBy;
+        private Timestamps timestamps;
+        private String parentId = "root";
+        private Integer baseVersion;
+        private String title;
+        private List<Long> attachmentList;
+        private boolean pinned;
+        private boolean isArchived;
+        private List<User> collaborators;
+        private List<Label> labels;
+        private String text;
+        private boolean isChecked;
+
+        public BaseNode build(){
+            return new BaseNode(this);
+        }
+
+        public NodesBuilder setNodeId(String nodeId) {
+            this.nodeId = nodeId;
+            return this;
+        }
+
+        public NodesBuilder setDeleted(boolean deleted) {
+            this.deleted = deleted;
+            return this;
+        }
+
+        public NodesBuilder setTrashed(boolean trashed) {
+            this.trashed = trashed;
+            return this;
+        }
+
+        public NodesBuilder setNodeType(NodeType nodeType) {
+            this.nodeType = nodeType;
+            return this;
+        }
+
+        public NodesBuilder setCreatedBy(User createdBy) {
+            this.createdBy = createdBy;
+            return this;
+        }
+
+        public NodesBuilder setLastModifiedBy(User lastModifiedBy) {
+            this.lastModifiedBy = lastModifiedBy;
+            return this;
+        }
+
+        public NodesBuilder setTimestamps(Timestamps timestamps) {
+            this.timestamps = timestamps;
+            return this;
+        }
+
+        public NodesBuilder setParentId(String parentId) {
+            this.parentId = parentId;
+            return this;
+        }
+
+        public NodesBuilder setBaseVersion(Integer baseVersion) {
+            this.baseVersion = baseVersion;
+            return this;
+        }
+
+        public NodesBuilder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public NodesBuilder setAttachmentList(List<Long> attachmentList) {
+            this.attachmentList = attachmentList;
+            return this;
+        }
+
+        public NodesBuilder setPinned(boolean pinned) {
+            this.pinned = pinned;
+            return this;
+        }
+
+        public NodesBuilder setArchived(boolean archived) {
+            isArchived = archived;
+            return this;
+        }
+
+        public NodesBuilder setCollaborators(List<User> collaborators) {
+            this.collaborators = collaborators;
+            return this;
+        }
+
+        public NodesBuilder setLabels(List<Label> labels) {
+            this.labels = labels;
+            return this;
+        }
+
+        public NodesBuilder setText(String text) {
+            this.text = text;
+            return this;
+        }
+
+        public NodesBuilder setChecked(boolean checked) {
+            isChecked = checked;
+            return this;
+        }
     }
 }

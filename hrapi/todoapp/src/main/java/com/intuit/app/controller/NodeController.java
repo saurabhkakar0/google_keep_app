@@ -40,16 +40,25 @@ public class NodeController {
      * @exception com.intuit.app.exception.LabelNotExistsException If label does not exists in the database
      */
     @RequestMapping(value = "change/",method = RequestMethod.POST,consumes = "application/json",produces = "application/json")
-    public ResponseEntity<BaseAPIResponse> updateOrInserNote(@RequestBody NodesChangeRequest nodesChangeRequest, HttpServletRequest request) throws Exception{
-        logger.debug("NodeController::updateOrInserNote : requestId is {}",nodesChangeRequest.getRequestId());
+    public ResponseEntity<BaseAPIResponse> changeNode(@RequestBody NodesChangeRequest nodesChangeRequest, HttpServletRequest request) throws Exception{
+        logger.debug("NodeController::changeNode : requestId is {}",nodesChangeRequest.getRequestId());
+        if(nodesChangeRequest.getNodes()==null || nodesChangeRequest.getNodes().size()==0){
+            logger.info("NodeController::changeNode : requestId {} has no nodes present",nodesChangeRequest.getRequestId());
+            return ResponseEntity.status(HttpStatus.OK).body(buildNodesChangeResponse(nodesChangeRequest));
+        }
         notesService.updateNodes(nodesChangeRequest);
+        NodesChangeResponse response = buildNodesChangeResponse(nodesChangeRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
+    }
+
+    private NodesChangeResponse buildNodesChangeResponse(@RequestBody NodesChangeRequest nodesChangeRequest) {
         NodesChangeResponse response = new NodesChangeResponse();
         response.setStatusCode(HttpStatus.OK.value()); //Adding Status in the Response Body too.
         response.setStatusMessage("SUCCESS");
-        response.setNodes(nodesChangeRequest.getNodeList());
+        response.setNodes(nodesChangeRequest.getNodes());
         response.setRequestId(nodesChangeRequest.getRequestId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-
+        return response;
     }
 
 

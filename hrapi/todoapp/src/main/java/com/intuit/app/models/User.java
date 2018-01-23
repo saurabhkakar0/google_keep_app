@@ -11,6 +11,14 @@ public class User {
     private String email;
     private Sex sex;
 
+    public User() {
+    }
+
+    public User(String userId, String email) {
+        this.userId = userId;
+        this.email = email;
+    }
+
     public enum Sex{
         MALE("M"),
         FEMALE("F");

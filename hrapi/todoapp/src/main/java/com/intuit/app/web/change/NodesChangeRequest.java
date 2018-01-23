@@ -8,7 +8,7 @@ import com.intuit.app.models.BaseNode;
 public class NodesChangeRequest {
 
     private String requestId;
-    private List<BaseNode> nodeList;
+    private List<BaseNode> nodes;
     private APIRequestInfo apiRequestInfo;
 
 
@@ -20,12 +20,12 @@ public class NodesChangeRequest {
         this.requestId = requestId;
     }
 
-    public List<BaseNode> getNodeList() {
-        return nodeList;
+    public List<BaseNode> getNodes() {
+        return nodes;
     }
 
-    public void setNodeList(List<BaseNode> nodeList) {
-        this.nodeList = nodeList;
+    public void setNodes(List<BaseNode> nodes) {
+        this.nodes = nodes;
     }
 
     public APIRequestInfo getApiRequestInfo() {

@@ -112,10 +112,11 @@ public class NotesDao implements INotesDao {
      */
     @Override
     public void insertOrUpdate(NodesChangeRequest nodesChangeRequest) {
-        logger.debug("NotesDao::insertOrUpdate : requestId is {}, nodes in this request are {}",nodesChangeRequest.getRequestId(),nodesChangeRequest.getNodeList().size());
-        for(BaseNode node:nodesChangeRequest.getNodeList()){
+        logger.debug("NotesDao::insertOrUpdate : requestId is {}, nodes in this request are {}",nodesChangeRequest.getRequestId(),nodesChangeRequest.getNodes().size());
+        logger.debug("NotesDao::insertOrUpdate : requestId is {}, nodes in this request are {}",nodesChangeRequest.getRequestId(),nodesChangeRequest.getNodes().size());
+        for(BaseNode node:nodesChangeRequest.getNodes()){
             if(node.getNodeId()==null || node.getNodeId().trim().isEmpty())
-                throw new NodeIdNotPresentException(ErrorCodes.NODE_ID_MISSING,"Node Id is missing");
+                throw new NodeIdNotPresentException(ErrorCodes.NODE_ID_MISSING,"Node Id is misng");
             if(node.isDeleted()){
                 deleteNode(node);
                 return;

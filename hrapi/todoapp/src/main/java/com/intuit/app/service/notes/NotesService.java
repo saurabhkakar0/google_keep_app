@@ -28,7 +28,7 @@ public class NotesService implements INotesService {
 
     @Override
     public void updateNodes(NodesChangeRequest nodesChangeRequest) {
-        logger.debug("NotesService::updateNodes : requestId is {}, nodes in this request are {}",nodesChangeRequest.getRequestId(),nodesChangeRequest.getNodeList().size());
+        logger.debug("NotesService::updateNodes : requestId is {}, nodes in this request are {}",nodesChangeRequest.getRequestId(),nodesChangeRequest.getNodes().size());
         notesDao.insertOrUpdate(nodesChangeRequest);
     }
 }
