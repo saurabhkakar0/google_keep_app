@@ -200,13 +200,14 @@ public class NotesDao implements INotesDao {
     private void updateLabels(BaseNode node) {
         List<Long> selectedLabels = new ArrayList<>();
         List<Long> deletedLabels = new ArrayList<>();
-        for(Label label:node.getLabels()){
-            if(label.isDeleted()){
-                deletedLabels.add(label.getLabelId());
-            }else if(label.isSelected()){
-                selectedLabels.add(label.getLabelId());
+        if(node.getLabels()!=null && node.getLabels().size()>0)
+            for(Label label:node.getLabels()){
+                if(label.isDeleted()){
+                    deletedLabels.add(label.getLabelId());
+                }else if(label.isSelected()){
+                    selectedLabels.add(label.getLabelId());
+                }
             }
-        }
         if(deletedLabels.size() > 0){
             deleteLabelsForNode(node, deletedLabels);
         }

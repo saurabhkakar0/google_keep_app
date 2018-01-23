@@ -21,12 +21,12 @@ import com.intuit.app.web.change.NodesChangeRequest;
 import com.intuit.app.web.change.NodesChangeResponse;
 
 
-public class NodesClient {
+public class CreateNoteClient {
 
-    private static final Logger log = LoggerFactory.getLogger(NodesClient.class);
+    private static final Logger log = LoggerFactory.getLogger(CreateNoteClient.class);
 
     public static void main(String args[]) {
-        new NodesClient().addNewNote();
+        new CreateNoteClient().addNewNote();
     }
 
 
@@ -52,7 +52,9 @@ public class NodesClient {
         BaseNode.NodesBuilder nodesBuilder = new BaseNode.NodesBuilder();
         List<Label> labels = getLabels();
         Timestamps timestamps = getTimeStamps();
-        nodesBuilder.setNodeId("1516476264221.734854416")
+
+        String parentId = "75915915241017734854416";
+        nodesBuilder.setNodeId("75915915241017734854416")
         .setParentId("root")
         .setDeleted(false)
         .setTitle("Intuit App Title 1")
@@ -69,8 +71,8 @@ public class NodesClient {
 
         nodes.add(new BaseNode(nodesBuilder));
 
-        nodesBuilder.setNodeId("1516476264221.734854417")
-        .setParentId("1516476264221.734854416")
+        nodesBuilder.setNodeId(getDateTime()+"734854416")
+        .setParentId(parentId)
         .setDeleted(false)
         .setText("Finish Groceries")
         .setArchived(false)
@@ -84,8 +86,8 @@ public class NodesClient {
 
         nodes.add(new BaseNode(nodesBuilder));
 
-        nodesBuilder.setNodeId("1516476264221.7348544168")
-        .setParentId("1516476264221.734854416")
+        nodesBuilder.setNodeId(getDateTime()+"734854416")
+        .setParentId(parentId)
         .setDeleted(false)
         .setText("return items")
         .setArchived(false)
@@ -100,6 +102,10 @@ public class NodesClient {
         nodes.add(new BaseNode(nodesBuilder));
 
         return nodes;
+    }
+
+    private String getDateTime() {
+        return Long.toString(System.nanoTime());
     }
 
     private Timestamps getTimeStamps() {
