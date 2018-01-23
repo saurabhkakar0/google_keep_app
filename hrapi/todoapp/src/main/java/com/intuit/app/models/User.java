@@ -74,4 +74,12 @@ public class User {
     public void setSex(Sex sex) {
         this.sex = sex;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId='" + userId + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

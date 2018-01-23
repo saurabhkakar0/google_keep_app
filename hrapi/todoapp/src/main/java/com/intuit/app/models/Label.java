@@ -73,4 +73,14 @@ public class Label {
     public void setAttachedNotes(java.util.List attachedNotes) {
         this.attachedNotes = attachedNotes;
     }
+
+    @Override
+    public String toString() {
+        return "Label{" +
+                "labelId=" + labelId +
+                ", labelName='" + labelName + '\'' +
+                ", deleted=" + deleted +
+                ", selected=" + selected +
+                '}';
+    }
 }

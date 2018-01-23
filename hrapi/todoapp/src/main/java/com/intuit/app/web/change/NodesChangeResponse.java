@@ -19,6 +19,9 @@ public class NodesChangeResponse extends BaseAPIResponse{
 
     @Override
     public String toString() {
-        return super.toString();
+        super.toString();
+        return "NodesChangeResponse{" +
+                "nodes=" + nodes +
+                '}';
     }
 }

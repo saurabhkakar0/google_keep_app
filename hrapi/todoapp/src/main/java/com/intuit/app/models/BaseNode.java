@@ -246,6 +246,29 @@ public class BaseNode {
         isChecked = checked;
     }
 
+    @Override
+    public String toString() {
+        return "BaseNode{" +
+                "nodeId='" + nodeId + '\'' +
+                ", deleted=" + deleted +
+                ", trashed=" + trashed +
+                ", nodeType=" + nodeType +
+                ", createdBy=" + createdBy +
+                ", lastModifiedBy=" + lastModifiedBy +
+                ", timestamps=" + timestamps +
+                ", parentId='" + parentId + '\'' +
+                ", baseVersion=" + baseVersion +
+                ", title='" + title + '\'' +
+                ", attachmentList=" + attachmentList +
+                ", pinned=" + pinned +
+                ", isArchived=" + isArchived +
+                ", collaborators=" + collaborators +
+                ", labels=" + labels +
+                ", text='" + text + '\'' +
+                ", isChecked=" + isChecked +
+                '}';
+    }
+
     public static class NodesBuilder {
 
         private String nodeId;
@@ -355,4 +378,5 @@ public class BaseNode {
             return this;
         }
     }
+
 }

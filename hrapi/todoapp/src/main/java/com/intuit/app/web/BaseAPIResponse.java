@@ -41,10 +41,11 @@ public class BaseAPIResponse {
 
     @Override
     public String toString() {
-        return "{statusCode :" +statusCode +
-                ", statusMessage :" +statusMessage +
-                ", version :" +version +
-                ", requestId :" +requestId +
-                "}";
+        return "BaseAPIResponse{" +
+                "statusCode=" + statusCode +
+                ", statusMessage='" + statusMessage + '\'' +
+                ", version='" + version + '\'' +
+                ", requestId='" + requestId + '\'' +
+                '}';
     }
 }

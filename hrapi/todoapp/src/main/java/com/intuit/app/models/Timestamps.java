@@ -59,4 +59,13 @@ public class Timestamps {
         this.updated = updated;
     }
 
+    @Override
+    public String toString() {
+        return "Timestamps{" +
+                "created=" + created +
+                ", deleted=" + deleted +
+                ", trashed=" + trashed +
+                ", updated=" + updated +
+                '}';
+    }
 }
