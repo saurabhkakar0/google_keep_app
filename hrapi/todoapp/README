@@ -54,3 +54,14 @@
 
 4. Following are the exposed APIs :
 
+    a. http://localhost:8080/intuit/v1/notes/change/
+       Above API can be used for :
+
+         i. Create New Note : As mentioned in (1.a), API expects the NodeChangeRequest to have a nodeId present.
+        ii. Update Note :
+       iii. Trash Note : It has to be a NodeType NOTE or LIST.
+        iv. Add Label to Note :
+         v. Delete Label to Note :
+        vi. Delete Note and all its associated items : It has to be a NodeType NOTE or LIST.
+       vii. Delete LIST_ITEM node : This will hard delete the node.
+
