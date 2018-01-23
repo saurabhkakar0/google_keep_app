@@ -31,53 +31,92 @@ public class NotesDao implements INotesDao {
 
     private static final String ROOT = "root";
     private static final String EXISTS_SQL = "SELECT count(*) FROM NODE WHERE node_id = ?";
+
+
+    private static final String INSERT_UPDATE_NODE_SQL = "INSERT INTO NODE (   " +
+            "   node_id,  " +
+            "   parent_node_id,  " +
+            "   node_type,  " +
+            "   title,  " +
+            "   text,  " +
+            "   isChecked,  " +
+            "   isPinned,  " +
+            "   isArchived,  " +
+            "   baseVersion,  " +
+            "   created_date,  " +
+            "   updated_date)  " +
+            "   VALUES (" +
+            "   ?,  " +
+            "   ?,  " +
+            "   ?,  " +
+            "   ?,  " +
+            "   ?,  " +
+            "   ?,  " +
+            "   ?,  " +
+            "   ?,  " +
+            "   ?,  " +
+            "   ?,  " +
+            "   ?)  " +
+            "   ON DUPLICATE KEY UPDATE   " +
+            "   node_id = VALUES(node_id),  " +
+            "   parent_node_id = VALUES(parent_node_id),  " +
+            "   node_type = VALUES(node_type),  " +
+            "   title = 'TEST UPDATED',  " +
+            "   text = VALUES(text),  " +
+            "   isChecked = VALUES(isChecked),  " +
+            "   isPinned = VALUES(isPinned),  " +
+            "   isArchived = VALUES(isArchived),  " +
+            "   baseVersion = VALUES(baseVersion),  " +
+            "   created_date = VALUES(created_date),  " +
+            "   updated_date = VALUES(updated_date);  ";
+
     private static final String INSERT_NODE_SQL = "INSERT INTO NODE (" +
-            "node_id," +
-            "parent_node_id," +
-            "node_type," +
-            "title," +
-            "text," +
-            "isChecked," +
-            "isPinned," +
-            "isArchived," +
-            "baseVersion," +
-            "created_date," +
-            "updated_date) " +
-            "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+            "   node_id," +
+            "   parent_node_id," +
+            "   node_type," +
+            "   title," +
+            "   text," +
+            "   isChecked," +
+            "   isPinned," +
+            "   isArchived," +
+            "   baseVersion," +
+            "   created_date," +
+            "   updated_date) " +
+            "   VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
     private static final String UPDATE_NODE_SQL = "UPDATE NODE SET " +
-            "node_type = ?," +
-            "title = ?," +
-            "text = ?," +
-            "isChecked = ?," +
-            "isPinned = ?," +
-            "isArchived = ?," +
-            "baseVersion = ?," +
-            "created_date = ?," +
-            "updated_date = ? " +
-            "WHERE node_id = ?";
+            "   node_type = ?," +
+            "   title = ?," +
+            "   text = ?," +
+            "   isChecked = ?," +
+            "   isPinned = ?," +
+            "   isArchived = ?," +
+            "   baseVersion = ?," +
+            "   created_date = ?," +
+            "   updated_date = ? " +
+            "   WHERE node_id = ?";
 
     private static final String DELETE_NODE_SQL = "DELETE FROM NODE WHERE node_id = ?";
 
     private static final String DELETE_ROOT_NODE = "DELETE FROM NODE WHERE node_id IN ( " +
-            "  SELECT * FROM (         " +
+            "   SELECT * FROM (         " +
             "   SELECT n2.node_id FROM NODE n " +
             "   LEFT JOIN NODE n2 ON " +
             "   n2.parent_node_id = n.node_id             " +
             "   WHERE n.node_id = ? " +
-            "            UNION " +
-            "            SELECT n.node_id FROM NODE n " +
-            "            WHERE n.node_id = ? " +
+            "   UNION " +
+            "   SELECT n.node_id FROM NODE n " +
+            "   WHERE n.node_id = ? " +
             "   ) AS p " +
-            " )";
+            "   )";
 
     private static final String DELETE_LABEL_SQL = "DELETE FROM NODE_LABEL WHERE node_id = :node_id and label_id in (:deletedLabels)";
 
     private static final String INSERT_LABEL_SQL = "INSERT INTO NODE_LABEL (node_id, label_id) " +
-            "SELECT * FROM ( SELECT :node_id, :label_id ) As tmp " +
-            "WHERE NOT EXISTS ( " +
-            "SELECT node_id,label_id FROM NODE_LABEL WHERE node_id = :node_id and label_id = :label_id" +
-            ") LIMIT 1";
+            "   SELECT * FROM ( SELECT :node_id, :label_id ) As tmp " +
+            "   WHERE NOT EXISTS ( " +
+            "   SELECT node_id,label_id FROM NODE_LABEL WHERE node_id = :node_id and label_id = :label_id" +
+            "   ) LIMIT 1";
 
     private static final Logger logger = LoggerFactory.getLogger(NotesService.class);
 
@@ -98,20 +137,28 @@ public class NotesDao implements INotesDao {
     }
 
 
+    /**
+     * This method is annotated with <code>Transactional</code> which means either all the nodes in the NodesChangeRequest will be processed or none.
+     * Nodes can
+     * @param nodesChangeRequest
+     * @see NodesChangeRequest
+     *
+     */
     @Override
     @Transactional
     public void insertOrUpdate(NodesChangeRequest nodesChangeRequest) {
         logger.debug("NotesDao::insertOrUpdate : requestId is {}, nodes in this request are {}",nodesChangeRequest.getRequestId(),nodesChangeRequest.getNodeList().size());
         for(BaseNode node:nodesChangeRequest.getNodeList()){
             final String nodeId = node.getNodeId();
-            if(nodeExists(nodeId)){
+
                 if(node.isDeleted()){
                     deleteNode(node);
+                    return;
                 }else
                     updateNode(node);
-            }else{
-                insertNode(node);
-            }
+
+               // insertNode(node);
+
         }
     }
 
@@ -146,19 +193,7 @@ public class NotesDao implements INotesDao {
         if(node.getNodeType().equals(NodeType.BLOB)){
             insertAttachment();
         }else{
-            final int update = jdbcTemplate.update(INSERT_NODE_SQL,
-                    node.getNodeId(),
-                    node.getParentId(),
-                    node.getNodeType().getValue(),
-                    node.getTitle(),
-                    node.getText(),
-                    DBUtill.getString(node.isChecked()),
-                    DBUtill.getString(node.isPinned()),
-                    DBUtill.getString(node.isArchived()),
-                    node.getBaseVersion(),
-                    DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getCreated()),
-                    DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getUpdated()));
-            logger.debug("NotesDao::insertNode : update is {}",update);
+            insertUpdateNodeDetails(node);
 
         }
     }
@@ -168,27 +203,32 @@ public class NotesDao implements INotesDao {
 
     private void updateNode(BaseNode node) {
 
-            if(node.getParentId().equals(ROOT)){
-                if (node.isTrashed()) {
-                    updateNodeAndChildren(node);
-                }
-                updateLabels(node);
+        if(node.getParentId().equals(ROOT)){
+            if (node.isTrashed()) {
+                updateNodeAndChildren(node);
+                return;
             }
-            else {
-                final int update = jdbcTemplate.update(UPDATE_NODE_SQL,
-                        node.getNodeType().getValue(),
-                        node.getTitle(),
-                        node.getText(),
-                        DBUtill.getString(node.isChecked()),
-                        DBUtill.getString(node.isPinned()),
-                        DBUtill.getString(node.isArchived()),
-                        node.getBaseVersion(),
-                        DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getCreated()),
-                        DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getUpdated()),
-                        node.getNodeId());
-                logger.debug("NotesDao::updateNode : update is {}", update);
-            }
+            updateLabels(node);
+        }
+        insertUpdateNodeDetails(node);
 
+
+    }
+
+    private void insertUpdateNodeDetails(BaseNode node) {
+        final int update = jdbcTemplate.update(INSERT_UPDATE_NODE_SQL,
+                node.getNodeId(),
+                node.getParentId(),
+                node.getNodeType().getValue(),
+                node.getTitle(),
+                node.getText(),
+                DBUtill.getString(node.isChecked()),
+                DBUtill.getString(node.isPinned()),
+                DBUtill.getString(node.isArchived()),
+                node.getBaseVersion(),
+                DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getCreated()),
+                DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getUpdated()));
+        logger.debug("NotesDao::updateNode : update is {}", update);
     }
 
     private void updateLabels(BaseNode node) {
@@ -202,21 +242,29 @@ public class NotesDao implements INotesDao {
             }
         }
         if(deletedLabels.size() > 0){
-            MapSqlParameterSource namedParameters = new MapSqlParameterSource();
-            namedParameters.addValue("deletedLabels", deletedLabels);
-            namedParameters.addValue("node_id",node.getNodeId());
-            int delete = namedParameterJdbcTemplate.update(DELETE_LABEL_SQL, namedParameters);
-            logger.debug("NotesDao::updateLabels : delete is {}", delete);
+            deleteLabelsForNode(node, deletedLabels);
         }
         if(selectedLabels.size() > 0){
-            for(Long labelId:selectedLabels) {
-                MapSqlParameterSource namedParameters = new MapSqlParameterSource();
-                namedParameters.addValue("label_id", labelId);
-                namedParameters.addValue("node_id", node.getNodeId());
-                int insert = namedParameterJdbcTemplate.update(INSERT_LABEL_SQL, namedParameters);
-                logger.debug("NotesDao::updateLabels : insert is {}", insert);
-            }
+            insertLabelsForNode(node, selectedLabels);
         }
+    }
+
+    private void insertLabelsForNode(BaseNode node, List<Long> selectedLabels) {
+        for(Long labelId:selectedLabels) {
+            MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+            namedParameters.addValue("label_id", labelId);
+            namedParameters.addValue("node_id", node.getNodeId());
+            int insert = namedParameterJdbcTemplate.update(INSERT_LABEL_SQL, namedParameters);
+            logger.debug("NotesDao::updateLabels : insert is {}", insert);
+        }
+    }
+
+    private void deleteLabelsForNode(BaseNode node, List<Long> deletedLabels) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("deletedLabels", deletedLabels);
+        namedParameters.addValue("node_id",node.getNodeId());
+        int delete = namedParameterJdbcTemplate.update(DELETE_LABEL_SQL, namedParameters);
+        logger.debug("NotesDao::updateLabels : delete is {}", delete);
     }
 
     private void updateNodeAndChildren(BaseNode node) {
