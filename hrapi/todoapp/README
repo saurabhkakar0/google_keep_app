@@ -1,40 +1,37 @@
 
-
-
-
 1 For each request sent by front end client to server, following assumptions are made
 
-    1. For each node in nodes list, nodeId must be present.
+    a. For each node in nodes list, nodeId must be present.
        nodeId will be UNIX based timestamp + uniqueId which needs to be send by front end client to the back end server.
        If nodeId is not present, then NodeIdNotPresentException will be thrown and Transaction will be rolled back.
 
-    2. Client of this backend service is responsible for maintaining the state of all the nodes. On any change in the node on the
+    b. Client of this backend service is responsible for maintaining the state of all the nodes. On any change in the node on the
        client side, back end service will be called with the changed nodes.
 
-    3. If node is root, then its parentId will be string "root". Else parentId will be the nodeId of the parent.
+    c. If node is root, then its parentId will be string "root". Else parentId will be the nodeId of the parent.
        For example If node "y" is of type LIST_ITEM or BLOB, then this node "y" must has parentId present in the request.
        Also parentId must be valid nodeId of node entity.
 
-    4. All the timestamps related to the node will be send by front end. Following time stamps are required:
+    d. All the timestamps related to the node will be send by front end. Following time stamps are required:
         a. created
         b. updated
         c. deleted
         d. trashed
         if isTrashed is true, then trashed timestamp must be valid.
 
-    5. LIST_ITEM node will not be trashed, they can only be deleted. If deleted is true in the request, then back end server will
+    e. LIST_ITEM node will not be trashed, they can only be deleted. If deleted is true in the request, then back end server will
        delete this LIST_ITEM node from the database.
 
-    6. if isChecked is valid for node type LIST_ITEM only. If it is true, then column isChecked in LIST_ITEM table will be set to true.
+    f. if isChecked is valid for node type LIST_ITEM only. If it is true, then column isChecked in LIST_ITEM table will be set to true.
 
-    7. You can only upload images of type jpeg and png only. Image size must be less than 2 MB. All the image BLOB will be stored in the ATTACHMENT
+    g. You can only upload images of type jpeg and png only. Image size must be less than 2 MB. All the image BLOB will be stored in the ATTACHMENT
        table.
 
-    8. If parent nodeId is set to isTrashed true, then all the child nodeIds (LIST_ITEM and BLOB) will also be set as isTrashed true.
+    h. If parent nodeId is set to isTrashed true, then all the child nodeIds (LIST_ITEM and BLOB) will also be set as isTrashed true.
 
-    9. If parent nodeId is set to deleted true, then all the child nodeIds (LIST_ITEM and BLOB) will also be deleted too.
+    i. If parent nodeId is set to deleted true, then all the child nodeIds (LIST_ITEM and BLOB) will also be deleted too.
 
-    10. Client is responsible for sending the following information regarding attached Labels to the Nodes :
+    j. Client is responsible for sending the following information regarding attached Labels to the Nodes :
         a. deleted - This will be set to true if the Label is removed by the user for the node it was assigned.
         b. selected - This will be set to true if the Label is selected first time by the user for the node.
         labelId must exist in the database for both the above operation.
@@ -54,3 +51,6 @@
      PostMan for testing
      JSON as media transfer
      Tomcat 8 Server
+
+4. Following are the exposed APIs :
+

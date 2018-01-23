@@ -57,12 +57,29 @@ public class BaseNode {
 
     private Integer baseVersion;
 
+    /**
+     * title is applicable for NodeTyope root only.
+     * @see NodeType
+     */
     private String title;
 
     private List<Long> attachmentList;
+
+    /**
+     * title is applicable for NodeType Note and List only.
+     * @see NodeType
+     */
     private boolean pinned;
+
     private boolean isArchived;
+
     private List<User> collaborators;
+
+    /**
+     * This stores the labels associated with the root node.
+     * Labels can only be associated with NodeType Note and List which are actually root nodes.
+     * @see Label
+     */
     private List<Label> labels;
 
     private String text;
