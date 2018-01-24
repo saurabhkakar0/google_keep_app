@@ -9,5 +9,5 @@ public interface INotesDao {
 
     List<List<BaseNode>> getNotes();
 
-    void insertOrUpdate(NodesChangeRequest nodesChangeRequest);
+    List<BaseNode> insertOrUpdate(NodesChangeRequest nodesChangeRequest);
 }

@@ -9,5 +9,5 @@ public interface INotesService {
 
     List<List<BaseNode>> getNotes();
 
-    void updateNodes(NodesChangeRequest nodesChangeRequest);
+    List<BaseNode> updateNodes(NodesChangeRequest nodesChangeRequest);
 }

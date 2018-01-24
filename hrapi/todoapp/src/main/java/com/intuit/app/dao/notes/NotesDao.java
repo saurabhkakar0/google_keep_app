@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.intuit.app.dao.mappers.NoteMapper;
 import com.intuit.app.exception.ErrorCodes;
 import com.intuit.app.exception.NodeIdNotPresentException;
+import com.intuit.app.exception.NodeUpdateException;
 import com.intuit.app.models.BaseNode;
 import com.intuit.app.models.Label;
 import com.intuit.app.service.notes.NotesService;
@@ -111,18 +112,18 @@ public class NotesDao implements INotesDao {
      *
      */
     @Override
-    public void insertOrUpdate(NodesChangeRequest nodesChangeRequest) {
+    public List<BaseNode> insertOrUpdate(NodesChangeRequest nodesChangeRequest) {
         logger.debug("NotesDao::insertOrUpdate : requestId is {}, nodes in this request are {}",nodesChangeRequest.getRequestId(),nodesChangeRequest.getNodes().size());
-        logger.debug("NotesDao::insertOrUpdate : requestId is {}, nodes in this request are {}",nodesChangeRequest.getRequestId(),nodesChangeRequest.getNodes().size());
-        for(BaseNode node:nodesChangeRequest.getNodes()){
+        List<BaseNode> baseNodes = nodesChangeRequest.getNodes();
+        for(BaseNode node:baseNodes){
             if(node.getNodeId()==null || node.getNodeId().trim().isEmpty())
-                throw new NodeIdNotPresentException(ErrorCodes.NODE_ID_MISSING,"Node Id is misng");
+                throw new NodeIdNotPresentException(ErrorCodes.NODE_ID_MISSING,"Node Id is missing");
             if(node.isDeleted()){
                 deleteNode(node);
-                return;
             }else
                 updateNode(node);
         }
+        return baseNodes;
     }
 
     /**
@@ -182,37 +183,49 @@ public class NotesDao implements INotesDao {
      *        in the database.
      */
     private void insertUpdateNodeDetails(BaseNode node) {
-        final int update = jdbcTemplate.update(INSERT_UPDATE_NODE_SQL,
-                node.getNodeId(),
-                node.getParentId(),
-                node.getNodeType().getValue(),
-                node.getTitle(),
-                node.getText(),
-                DBUtill.getString(node.isChecked()),
-                DBUtill.getString(node.isPinned()),
-                DBUtill.getString(node.isArchived()),
-                node.getBaseVersion(),
-                DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getCreated()),
-                DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getUpdated()));
-        logger.debug("NotesDao::updateNode : update is {}", update);
+        int updatedVersion = node.getBaseVersion()+1;
+        node.setBaseVersion(updatedVersion);
+        try {
+            final int update = jdbcTemplate.update(INSERT_UPDATE_NODE_SQL,
+                    node.getNodeId(),
+                    node.getParentId(),
+                    node.getNodeType().getValue(),
+                    node.getTitle(),
+                    node.getText(),
+                    DBUtill.getString(node.isChecked()),
+                    DBUtill.getString(node.isPinned()),
+                    DBUtill.getString(node.isArchived()),
+                    node.getBaseVersion() + 1,
+                    DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getCreated()),
+                    DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getUpdated()));
+            logger.debug("NotesDao::updateNode : update is {}", update);
+        }catch(Throwable t){
+            logger.error("NotesDao::updateLabels : Error updating node with id {}. Error is {}", node.getNodeId(),t.getMessage());
+            throw new NodeUpdateException(ErrorCodes.NODE_UPDATE_EXCEPTION,t.getMessage(),t);
+        }
     }
 
     private void updateLabels(BaseNode node) {
-        List<Long> selectedLabels = new ArrayList<>();
-        List<Long> deletedLabels = new ArrayList<>();
-        if(node.getLabels()!=null && node.getLabels().size()>0)
-            for(Label label:node.getLabels()){
-                if(label.isDeleted()){
-                    deletedLabels.add(label.getLabelId());
-                }else if(label.isSelected()){
-                    selectedLabels.add(label.getLabelId());
+        try {
+            List<Long> selectedLabels = new ArrayList<>();
+            List<Long> deletedLabels = new ArrayList<>();
+            if (node.getLabels() != null && node.getLabels().size() > 0)
+                for (Label label : node.getLabels()) {
+                    if (label.isDeleted()) {
+                        deletedLabels.add(label.getLabelId());
+                    } else if (label.isSelected()) {
+                        selectedLabels.add(label.getLabelId());
+                    }
                 }
+            if (deletedLabels.size() > 0) {
+                deleteLabelsForNode(node, deletedLabels);
             }
-        if(deletedLabels.size() > 0){
-            deleteLabelsForNode(node, deletedLabels);
-        }
-        if(selectedLabels.size() > 0){
-            insertLabelsForNode(node, selectedLabels);
+            if (selectedLabels.size() > 0) {
+                insertLabelsForNode(node, selectedLabels);
+            }
+        }catch(Throwable t){
+            logger.error("NotesDao::updateLabels : Error updating node with id {}. Error is {}", node.getNodeId(),t.getMessage());
+            throw new NodeUpdateException(ErrorCodes.NODE_UPDATE_EXCEPTION,t.getMessage(),t);
         }
     }
 
