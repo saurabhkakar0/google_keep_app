@@ -195,7 +195,7 @@ public class NotesDao implements INotesDao {
                     DBUtill.getString(node.isChecked()),
                     DBUtill.getString(node.isPinned()),
                     DBUtill.getString(node.isArchived()),
-                    node.getBaseVersion() + 1,
+                    node.getBaseVersion(),
                     DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getCreated()),
                     DBUtill.convertToJavaSqlTimeStamp(node.getTimestamps().getUpdated()));
             logger.debug("NotesDao::updateNode : update is {}", update);

@@ -52,13 +52,13 @@ public class UpdateNoteClient {
         List<Label> labels = getLabels();
         Timestamps timestamps = getTimeStamps();
 
-        String parentId = "79336190381376734854416root";
-        nodesBuilder.setNodeId("79336190381376734854416root")
+        String parentId = "115616652772379734854416root";
+        nodesBuilder.setNodeId("115616652772379734854416root")
                 .setParentId("root")
                 .setDeleted(false)
                 .setTitle("Intuit App Title 2")
                 .setArchived(false)
-                .setBaseVersion(1)
+                .setBaseVersion(2)
                 .setChecked(false)
                 .setLabels(labels)
                 .setNodeType(NodeType.LIST)
@@ -75,7 +75,7 @@ public class UpdateNoteClient {
                 .setDeleted(false)
                 .setText("Finish Groceries 22")
                 .setArchived(false)
-                .setBaseVersion(1)
+                .setBaseVersion(2)
                 .setChecked(false)
                 .setNodeType(NodeType.LIST_ITEM)
                 .setTrashed(false)
@@ -88,9 +88,9 @@ public class UpdateNoteClient {
         nodesBuilder.setNodeId("79365595421525734854417")
                 .setParentId(parentId)
                 .setDeleted(false)
-                .setText("return items 22")
+                .setText("return items 222")
                 .setArchived(false)
-                .setBaseVersion(1)
+                .setBaseVersion(2)
                 .setChecked(false)
                 .setNodeType(NodeType.LIST_ITEM)
                 .setTrashed(false)
