@@ -3,14 +3,14 @@
 Lets start with few important terms:
 
 Node : It can be of following types :
+        
         a. Note : It can have title, color, text(List Item) and images (Blob).
         b. List : It can have title, color, itemised text(List Item)  and images (Blob). In this we can have List Items that can be checked.
         c. List Items : These are simple text nodes that can be associated with a check box. List Items are associated with the parent
                         node. Parent Node can be of type Note and List. If it is of type List, then these List Item node can be checked.
         d. Blob : These nodes are the images attached to the node of type Note or List.                
                         
-Label : You can assign a Label to the Node. These are independent entities and can exist on its own. There is many to many relationship between 
-        Node and Label.
+Label : You can assign a Label to the Node. These are independent entities and can exist on its own. There is many to many relationship between Node and Label.
         Note : Only nodes of type Note and List can have Labels as these are the parent nodes.
                 
 
