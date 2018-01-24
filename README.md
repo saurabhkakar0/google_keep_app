@@ -57,17 +57,17 @@ Label : You can assign a Label to the Node. These are independent entities and c
 
 3. Tools and Technologies Used:
 
-     3.1.      Maven     
-     3.2.      Spring Boot
-     3.3.      Spring JDBC
-     3.4.      REST based microservice
-     3.5.      MySql Database
-     3.6.      SQL     
-     3.7.      JSON
-     3.8.      Tomcat 8 Server
-     3.9.      IntelliJ IDE
-     3.10.      MySql Workbench
-     3.11.      PostMan for testing
+     a.      Maven     
+     b.      Spring Boot
+     c.      Spring JDBC
+     d.      REST based microservice
+     e.      MySql Database
+     f.      SQL     
+     g.      JSON
+     h.      Tomcat 8 Server
+     i.      IntelliJ IDE
+     j.      MySql Workbench
+     k.      PostMan for testing
      
 
 4. Following are the exposed APIs :
