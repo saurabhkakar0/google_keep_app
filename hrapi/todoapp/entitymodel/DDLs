@@ -24,20 +24,20 @@ CREATE TABLE NODE
 
 
 CREATE TABLE ATTACHMENT
-	( node_id 			   VARCHAR(64) NOT NULL,                 # This is the unique id of the node
+	( node_id 			   VARCHAR(64) NOT NULL,
 	  image				   blob,
       parent_node_id	   VARCHAR(50) NOT NULL,
-      text                 VARCHAR(1000) NOT NULL,                # Text of the Node
-      created_date         TIMESTAMP  NULL,                        # Date of creation of node
-      updated_date         TIMESTAMP  NULL,                        # Date of updation of node
-      deleted_date         TIMESTAMP  NULL,                        # Date of deletion of node
-      trashed_date         TIMESTAMP  NULL,                        # Date of trash of node
-      PRIMARY KEY    (node_id),   								 # Make the nodeId the primary key
+      text                 VARCHAR(1000) NOT NULL,
+      created_date         TIMESTAMP  NULL,
+      updated_date         TIMESTAMP  NULL,
+      deleted_date         TIMESTAMP  NULL,
+      trashed_date         TIMESTAMP  NULL,
+      PRIMARY KEY    (node_id),
       FOREIGN KEY (parent_node_id) REFERENCES NODE(node_id) ON DELETE CASCADE
 	);
 
 CREATE TABLE LABEL
-	( label_id 			   INT NOT NULL AUTO_INCREMENT,                 # This is the unique id of the labe;
+	( label_id 			   INT NOT NULL AUTO_INCREMENT,
 	  name				   VARCHAR(50) NOT NULL,
       baseVersion          INT  NOT NULL,
       created_date         TIMESTAMP  NULL,                        # Date of creation of label
@@ -51,12 +51,12 @@ CREATE TABLE LABEL
 CREATE TABLE NODE_LABEL
 	(
       node_id 			   VARCHAR(64) NOT NULL,
-      label_id 			   INT NOT NULL ,                 # This is the unique id of the labe;
-      created_date         TIMESTAMP  NULL,                        # Date of creation of label
-      updated_date         TIMESTAMP  NULL,                        # Date of updation of label
-      deleted_date         TIMESTAMP  NULL,                        # Date of deletion of label
-      trashed_date         TIMESTAMP  NULL,                        # Date of trash of label
-      PRIMARY KEY    (node_id,label_id)   								 # Make the label_id the primary key
+      label_id 			   INT NOT NULL ,
+      created_date         TIMESTAMP  NULL,
+      updated_date         TIMESTAMP  NULL,
+      deleted_date         TIMESTAMP  NULL,
+      trashed_date         TIMESTAMP  NULL,
+      PRIMARY KEY    (node_id,label_id)
       FOREIGN KEY (node_id) REFERENCES NODE(node_id) ON DELETE CASCADE,
       FOREIGN KEY (label_id) REFERENCES LABEL(label_id) ON DELETE CASCADE
 	);
