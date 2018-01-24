@@ -53,17 +53,20 @@ Label : You can assign a Label to the Node. These are independent entities and c
 
 2. For DDL scripts, Please refer to DDLs.txt in entitymodel folder.
 
-3. Technologies Used:
+3. Tools and Technologies Used:
 
      Maven
      Spring Boot
      Spring JDBC
      REST based microservice
      MySql Database
-     SQL
-     PostMan for testing
-     JSON as media transfer
+     SQL     
+     JSON
      Tomcat 8 Server
+     IntelliJ IDE
+     MySql Workbench
+     PostMan for testing
+     
 
 4. Following are the exposed APIs :
 
