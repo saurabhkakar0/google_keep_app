@@ -1,3 +1,16 @@
+Lets start with few important terms:
+
+Node : It can be of following types :
+        a. Note : It can have title, color, text(List Item) and images (Blob).
+        b. List : It can have title, color, itemised text(List Item)  and images (Blob). In this we can have List Items that can be checked.
+        c. List Items : These are simple text nodes that can be associated with a check box. List Items are associated with the parent
+                        node. Parent Node can be of type Note and List. If it is of type List, then these List Item node can be checked.
+        d. Blob : These nodes are the images attached to the node of type Note or List.                
+                        
+Label : You can assign a Label to the Node. These are independent entities and can exist on its own. There is many to many relationship between 
+        Node and Label.
+        Note : Only nodes of type Note and List can have Labels as these are the parent nodes.
+                
 
 1 For each request sent by front end client to server, following assumptions are made
 
@@ -64,4 +77,10 @@
          v. Delete Label to Note :
         vi. Delete Note and all its associated items : It has to be a NodeType NOTE or LIST.
        vii. Delete LIST_ITEM node : This will hard delete the node.
+       
+    b. http://localhost:8080/intuit/v1/notes/list/ : To fetch all the Notes (active and trashed) for the user.
+                                                     (Not Implemented yet)
+    
+    c. http://localhost:8080/intuit/v1/label/change/ : To insert, update or delete the Label.
+                                                      (Not Implemented yet)
 
