@@ -32,11 +32,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApplicationSpringBootInitializer.class)
 @WebAppConfiguration
-public class CreateRootNodeTest {
+public class UpdateNoteTest {
 
     @MockBean
     NotesService notesService;
@@ -63,7 +62,7 @@ public class CreateRootNodeTest {
         Timestamps timestamps = getTimeStamps();
         List<BaseNode> nodes = new LinkedList<>();
 
-        nodesBuilder.setNodeId(getDateTime()+"734854416root")
+        nodesBuilder.setNodeId(getDateTime() + "734854416root")
                 .setParentId("root")
                 .setDeleted(false)
                 .setTitle("Intuit App Title 1")
@@ -73,8 +72,8 @@ public class CreateRootNodeTest {
                 .setNodeType(NodeType.LIST)
                 .setPinned(true)
                 .setTrashed(false)
-                .setCreatedBy(new User("saurabhkakar05","saurabh.kakar05@gmail.com"))
-                .setLastModifiedBy(new User("saurabhkakar05","saurabh.kakar05@gmail.com"));
+                .setCreatedBy(new User("saurabhkakar05", "saurabh.kakar05@gmail.com"))
+                .setLastModifiedBy(new User("saurabhkakar05", "saurabh.kakar05@gmail.com"));
 
         nodes.add(new BaseNode(nodesBuilder));
         NodesChangeRequest nodesChangeRequest = new NodesChangeRequest();
@@ -112,5 +111,4 @@ public class CreateRootNodeTest {
         timestamps.setUpdated(new DateTime());
         return timestamps;
     }
-
 }
