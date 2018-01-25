@@ -1,7 +1,9 @@
 package com.intuit.app.client;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -47,13 +49,21 @@ public class UpdateNoteClient {
 
     private List<BaseNode> createNewNodes() {
 
+
+        PriorityQueue<String> pq = new PriorityQueue<>(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return 0;
+            }
+        });
+
         List<BaseNode> nodes = new LinkedList<>();
         BaseNode.NodesBuilder nodesBuilder = new BaseNode.NodesBuilder();
         List<Label> labels = getLabels();
         Timestamps timestamps = getTimeStamps();
 
-        String parentId = "115616652772379734854416root";
-        nodesBuilder.setNodeId("115616652772379734854416root")
+        String parentId = "125307585703217734854416root";
+        nodesBuilder.setNodeId("125307585703217734854416root")
                 .setParentId("root")
                 .setDeleted(false)
                 .setTitle("Intuit App Title 2")
