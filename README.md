@@ -1,4 +1,4 @@
-# intuitapp
+# Google Keep App
 
 Lets start with few important terms:
 
